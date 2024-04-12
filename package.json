@@ -1,0 +1,35 @@
+{
+  "name": "@bablr/cli",
+  "description": "CLI for running BABLR parsers",
+  "version": "0.0.0",
+  "author": "Conrad Buck<conartist6@gmail.com>",
+  "type": "module",
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "bablr": "./bin/index.js"
+  },
+  "exports": {
+    ".": "./bin/index.js"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@bablr/agast-helpers": "github:bablr-lang/agast-helpers#caaa3389b422a03bc0f79e377fb499278bcd9109",
+    "@bablr/helpers": "github:bablr-lang/bablr-helpers#3092387d0a5833c896ab3e168d546a6d3c896985",
+    "bablr": "github:bablr-lang/bablr#279a549d0bf730e7d8ed008386ff157fc5b0fecd",
+    "commander": "12.0.0"
+  },
+  "devDependencies": {
+    "@bablr/eslint-config-base": "github:bablr-lang/eslint-config-base#49f5952efed27f94ee9b94340eb1563c440bf64e",
+    "enhanced-resolve": "^5.12.0",
+    "eslint": "^8.32.0",
+    "eslint-import-resolver-enhanced-resolve": "^1.0.5",
+    "eslint-plugin-import": "^2.27.5",
+    "iter-tools-es": "^7.3.1",
+    "prettier": "^2.6.2"
+  },
+  "repository": "github:bablr-lang/bablr-cli",
+  "homepage": "https://github.com/bablr-lang/bablr-cli",
+  "license": "MIT"
+}
