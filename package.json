@@ -16,8 +16,8 @@
   "sideEffects": false,
   "dependencies": {
     "@bablr/agast-helpers": "github:bablr-lang/agast-helpers#06c2deeda4804fcb6a5022cf2db677f8e89eb249",
-    "@bablr/helpers": "github:bablr-lang/bablr-helpers#71ca8e0ef002daa49849b4d77b2747786d295124",
-    "bablr": "github:bablr-lang/bablr#d80bbf0e4e3f5fa1a422f85660576049c28efd41",
+    "@bablr/helpers": "github:bablr-lang/bablr-helpers#5668beda522514eb4481cb611e50a5d57fb6b14d",
+    "bablr": "github:bablr-lang/bablr#afc62e1540931102700adcf34e98f1ac1484dc95",
     "commander": "12.0.0"
   },
   "devDependencies": {
