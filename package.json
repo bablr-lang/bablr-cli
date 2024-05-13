@@ -4,9 +4,7 @@
   "version": "0.0.0",
   "author": "Conrad Buck<conartist6@gmail.com>",
   "type": "module",
-  "files": [
-    "bin"
-  ],
+  "files": ["bin"],
   "bin": {
     "bablr": "./bin/index.js"
   },
@@ -15,9 +13,9 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@bablr/agast-helpers": "github:bablr-lang/agast-helpers#49df418cbd8b3f96318bd3dc52cd18195bc57637",
-    "@bablr/helpers": "github:bablr-lang/bablr-helpers#818892850b3be65194e2f4ab49b21e3756838aa0",
-    "bablr": "github:bablr-lang/bablr#95de7f069e2d4456d9aa5ce497ecfc645dbf43e5",
+    "@bablr/agast-helpers": "github:bablr-lang/agast-helpers#5a704bd826ed2e8ab6ef0419571433996cea2894",
+    "@bablr/helpers": "github:bablr-lang/bablr-helpers#8ded1818aef49ccc3c90783aa94516bd6da07050",
+    "bablr": "github:bablr-lang/bablr#0e60f07b60ab596c482d88efa71609effc3950a6",
     "commander": "12.0.0"
   },
   "devDependencies": {
