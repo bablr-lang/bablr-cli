@@ -25,7 +25,7 @@ const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
 };
 
-const enhancers = options.verbose ? { ...buildDebugEnhancers(logStderr), emitStrategy: null } : {};
+const enhancers = options.verbose ? { ...buildDebugEnhancers(logStderr), agastStrategy: null } : {};
 
 for await (const token of streamParse(
   language,
@@ -45,7 +45,10 @@ for await (const token of streamParse(
     ? `${'  '.repeat(indentAmt + offset)}${printTerminal(token)}`
     : printTerminal(token);
 
-  if (token.type === 'CloseNodeTag') {
+  if (
+    token.type === 'CloseNodeTag' ||
+    (token.type === 'OpenNodeTag' && token.value.flags.intrinsic)
+  ) {
     indentAmt--;
   }
 
