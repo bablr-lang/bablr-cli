@@ -17,7 +17,7 @@
   "dependencies": {
     "@bablr/agast-helpers": "0.1.0",
     "@bablr/helpers": "0.15.0",
-    "bablr": "0.1.0",
+    "bablr": "0.1.1",
     "commander": "12.0.0"
   },
   "devDependencies": {
