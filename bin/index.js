@@ -4,15 +4,16 @@
 
 import { program } from 'commander';
 import { streamParse } from 'bablr';
-import { sourceFromReadStream } from '@bablr/helpers/source';
+import { embeddedSourceFromReadStream, sourceFromReadStream } from '@bablr/helpers/source';
 import { buildDebugEnhancers } from '@bablr/helpers/enhancers';
 import { printTerminal } from '@bablr/agast-helpers/stream';
 
 program
   .option('-l, --language [URL]', 'The URL of the BABLR language to parse with')
   .option('-p, --production [type]', 'The top-level type for the parse')
-  .option('-f, --formatted', 'Whether to pretty-format the CSTML output')
-  .option('-v, --verbose', 'Whether to print debug logging to stderr during parsing')
+  .option('-f, --formatted', 'Pretty-format CSTML output')
+  .option('-v, --verbose', 'Prints debuggin information to stderr')
+  .option('-e, --embedded', 'Requires quoted input but enables gap parsing')
   .parse(process.argv);
 
 const options = program.opts();
@@ -27,10 +28,12 @@ const logStderr = (...args) => {
 
 const enhancers = options.verbose ? { ...buildDebugEnhancers(logStderr), agastStrategy: null } : {};
 
+const rawStream = process.stdin.setEncoding('utf-8');
+
 for await (const token of streamParse(
   language,
   options.production,
-  sourceFromReadStream(process.stdin.setEncoding('utf-8')),
+  options.embedded ? embeddedSourceFromReadStream(rawStream) : sourceFromReadStream(rawStream),
   {},
   enhancers,
 )) {
