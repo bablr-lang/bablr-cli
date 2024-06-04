@@ -6,21 +6,26 @@ import { program } from 'commander';
 import { streamParse } from 'bablr';
 import { embeddedSourceFromReadStream, sourceFromReadStream } from '@bablr/helpers/source';
 import { buildDebugEnhancers } from '@bablr/helpers/enhancers';
-import { printTerminal } from '@bablr/agast-helpers/stream';
+import colorSupport from 'color-support';
+import { pipeline } from 'node:stream/promises';
+import { generateCSTML, generateColorfulCSTML } from '../lib/syntax.js';
 
 program
   .option('-l, --language [URL]', 'The URL of the BABLR language to parse with')
   .option('-p, --production [type]', 'The top-level type for the parse')
-  .option('-f, --formatted', 'Pretty-format CSTML output')
-  .option('-v, --verbose', 'Prints debuggin information to stderr')
+  .option('-f, --format', 'Pretty-format CSTML output')
+  .option('-F, --no-format', 'Produce machine-readable CSTML output')
+  .option('-v, --verbose', 'Prints debugging information to stderr')
+  .option('-c, --color', 'Force colored output', true)
+  .option('-C, --no-color', 'Do not color output')
   .option('-e, --embedded', 'Requires quoted input but enables gap parsing')
   .parse(process.argv);
 
 const options = program.opts();
 
-const language = await import(options.language);
+const enableAnsi = colorSupport.hasBasic && options.color;
 
-let indentAmt = 0;
+const language = await import(options.language);
 
 const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
@@ -30,30 +35,17 @@ const enhancers = options.verbose ? { ...buildDebugEnhancers(logStderr), agastSt
 
 const rawStream = process.stdin.setEncoding('utf-8');
 
-for await (const token of streamParse(
-  language,
-  options.production,
-  options.embedded ? embeddedSourceFromReadStream(rawStream) : sourceFromReadStream(rawStream),
-  {},
-  enhancers,
-)) {
-  if (token.type === 'OpenNodeTag') {
-    indentAmt++;
-  }
+const generateCSTML_ = enableAnsi ? generateColorfulCSTML : generateCSTML;
 
-  const offset =
-    token.type === 'Null' ? 2 : ['Literal', 'Gap', 'Reference'].includes(token.type) ? 1 : 0;
-
-  const out = options.formatted
-    ? `${'  '.repeat(indentAmt + offset)}${printTerminal(token)}`
-    : printTerminal(token);
-
-  if (
-    token.type === 'CloseNodeTag' ||
-    (token.type === 'OpenNodeTag' && token.value.flags.intrinsic)
-  ) {
-    indentAmt--;
-  }
-
-  process.stdout.write(out + '\n');
-}
+pipeline(
+  generateCSTML_(
+    streamParse(
+      language,
+      options.production,
+      options.embedded ? embeddedSourceFromReadStream(rawStream) : sourceFromReadStream(rawStream),
+      {},
+      enhancers,
+    ),
+  ),
+  process.stdout,
+);
