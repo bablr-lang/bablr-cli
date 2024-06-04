@@ -4,7 +4,11 @@
 
 import { program } from 'commander';
 import { streamParse } from 'bablr';
-import { embeddedSourceFromReadStream, sourceFromReadStream } from '@bablr/helpers/source';
+import {
+  embeddedSourceFromReadStream,
+  sourceFromReadStream,
+  stripTrailingNewline,
+} from '@bablr/helpers/source';
 import { buildDebugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { pipeline } from 'node:stream/promises';
@@ -42,7 +46,9 @@ pipeline(
     streamParse(
       language,
       options.production,
-      options.embedded ? embeddedSourceFromReadStream(rawStream) : sourceFromReadStream(rawStream),
+      options.embedded
+        ? embeddedSourceFromReadStream(rawStream)
+        : stripTrailingNewline(sourceFromReadStream(rawStream)),
       {},
       enhancers,
     ),
