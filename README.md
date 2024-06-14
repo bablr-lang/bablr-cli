@@ -40,7 +40,7 @@ Running the above command produces the following output. Note that this is a str
 <>
   <Array>
     openToken:
-    <*Punctuator '[' balanced=']' />
+    <~*Punctuator '[' balanced=']' />
     <#*Space:Space>
       '\n  '
     </>
@@ -59,36 +59,36 @@ Running the above command produces the following output. Note that this is a str
         null
     </>
     separators[]:
-    <*Punctuator ',' />
+    <~*Punctuator ',' />
     <#*Space:Space>
       '\n  '
     </>
     elements[]:
     <Boolean>
       sigilToken:
-      <*Keyword 'true' />
+      <~*Keyword 'true' />
     </>
     separators[]:
-    <*Punctuator ',' />
+    <~*Punctuator ',' />
     <#*Space:Space>
       '\n  '
     </>
     elements[]:
     <String>
       openToken:
-      <*Punctuator '"' balanced='"' balancedSpan='String' />
+      <~*Punctuator '"' balanced='"' balancedSpan='String' />
       content:
       <*StringContent>
         '3'
       </>
       closeToken:
-      <*Punctuator '"' balancer />
+      <~*Punctuator '"' balancer />
       <#*Space:Space>
         '\n'
       </>
     </>
     closeToken:
-    <*Punctuator ']' balancer />
+    <~*Punctuator ']' balancer />
     <#*Space:Space>
       '\n'
     </>
