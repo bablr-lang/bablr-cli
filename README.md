@@ -16,7 +16,7 @@ Options:
   -f, --format             Pretty-format CSTML output (default: true)
   -v, --verbose            Prints debugging information to stderr
   -c, --color [WHEN]       When to use ANSI escape colors
-    WHEN: auto | always | never (default: "auto")
+    WHEN: "auto" | "always" | "never" (default: "auto")
   -e, --embedded           Requires quoted input but enables gap parsing
   -h, --help               display help for command
 ```

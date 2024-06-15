@@ -22,7 +22,7 @@ program
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
     '-c, --color [WHEN]',
-    'When to use ANSI escape colors. \n  WHEN: auto | always | never',
+    'When to use ANSI escape colors. \n  WHEN: "auto" | "always" | "never"',
     'auto',
   )
   .option('-e, --embedded', 'Requires quoted input but enables gap parsing')
