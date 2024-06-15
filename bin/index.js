@@ -18,11 +18,11 @@ program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [type]', 'The name of the top production type')
   .option('-f, --format', 'Pretty-format CSTML output', true)
-  .option('-F, --no-format', 'Produce machine-readable CSTML output')
+  .option('-F, --no-format')
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
     '-c, --color [WHEN]',
-    'When to use ANSI escape colors. \n  WHEN: "auto" | "always" | "never"',
+    'When to use ANSI escape colors \n  WHEN: "auto" | "always" | "never"',
     'auto',
   )
   .option('-e, --embedded', 'Requires quoted input but enables gap parsing')

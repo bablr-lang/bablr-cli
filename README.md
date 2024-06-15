@@ -13,7 +13,7 @@ Options:
   -l, --language [URL]     The URL of the top BABLR language
   -p, --production [type]  The name of the top production type
   -f, --format             Pretty-format CSTML output (default: true)
-  -F, --no-format          Produce machine-readable CSTML output
+  -F, --no-format
   -v, --verbose            Prints debugging information to stderr
   -c, --color [WHEN]       When to use ANSI escape colors
     WHEN: "auto" | "always" | "never" (default: "auto")
