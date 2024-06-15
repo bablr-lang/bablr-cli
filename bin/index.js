@@ -37,7 +37,7 @@ if (programOpts.color && !['auto', 'always', 'never'].includes(programOpts.color
 const options = {
   ...programOpts,
   color:
-    (programOpts.color.toLowerCase() === 'auto' && colorSupport.hasBasic) ||
+    (programOpts.color.toLowerCase() === 'auto' && colorSupport.hasBasic && !programOpts.verbose) ||
     programOpts.color.toLowerCase() === 'always',
 };
 
@@ -48,11 +48,7 @@ const logStderr = (...args) => {
 };
 
 if (options.verbose && options.color) {
-  // ANSI formatting escapes don't keep separate spanning stacks for stdin and sterr
-  // this means you NEED a parser that ingests a combination of log and output if you
-  // want to be able to highlight the complete output without breakage
-  // It can be built, but I haven't yet
-  throw new Error('Unsupported combination of options: verbose and color');
+  throw new Error('TODO support this in a better way than turning off color');
 }
 
 const enhancers = options.verbose ? { ...buildDebugEnhancers(logStderr), agastStrategy: null } : {};
