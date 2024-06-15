@@ -17,8 +17,8 @@ import { writeLinesToWritableStream } from '../lib/utils/node.js';
 program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [type]', 'The name of the top production type')
-  .option('-F, --no-format', 'Produce machine-readable CSTML output')
   .option('-f, --format', 'Pretty-format CSTML output', true)
+  .option('-F, --no-format', 'Produce machine-readable CSTML output')
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
     '-c, --color [WHEN]',
