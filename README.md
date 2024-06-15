@@ -10,13 +10,15 @@ This package has no built-in language support, but rather expects you to supply 
 Usage: bablr [options]
 
 Options:
-  -l, --language [URL]     The URL of the BABLR language to parse with
-  -p, --production [type]  The top-level type for the parse
-  -f, --format             Pretty-format CSTML output
+  -l, --language [URL]     The URL of the top BABLR language
+  -p, --production [type]  The name of the top production type
   -F, --no-format          Produce machine-readable CSTML output
+  -f, --format             Pretty-format CSTML output (default: true)
   -v, --verbose            Prints debugging information to stderr
-  -c, --color              Force colored output (default: true)
+  -c, --color              Color output using ANSI escapes (default: true)
   -C, --no-color           Do not color output
+  -d, --detect-color       Allow color only if support is detected (default: true)
+  -D, --no-detect-color    Allow color even if support is not detected
   -e, --embedded           Requires quoted input but enables gap parsing
   -h, --help               display help for command
 ```

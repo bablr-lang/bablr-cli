@@ -15,18 +15,24 @@ import { generateCSTML } from '../lib/syntax.js';
 import { writeLinesToWritableStream } from '../lib/utils/node.js';
 
 program
-  .option('-l, --language [URL]', 'The URL of the BABLR language to parse with')
-  .option('-p, --production [type]', 'The top-level type for the parse')
+  .option('-l, --language [URL]', 'The URL of the top BABLR language')
+  .option('-p, --production [type]', 'The name of the top production type')
   .option('-F, --no-format', 'Produce machine-readable CSTML output')
-  .option('-f, --format', 'Pretty-format CSTML output')
+  .option('-f, --format', 'Pretty-format CSTML output', true)
   .option('-v, --verbose', 'Prints debugging information to stderr')
-  .option('-c, --color', 'Force colored output', true)
+  .option('-c, --color', 'Color output using ANSI escapes', true)
   .option('-C, --no-color', 'Do not color output')
+  .option('-d, --detect-color', 'Allow color only if support is detected', true)
+  .option('-D, --no-detect-color', 'Allow color even if support is not detected')
   .option('-e, --embedded', 'Requires quoted input but enables gap parsing')
   .parse(process.argv);
 
 const programOpts = program.opts();
-const options = { ...programOpts, color: colorSupport.hasBasic && programOpts.color };
+
+const options = {
+  ...programOpts,
+  color: (!programOpts.detectColor || colorSupport.hasBasic) && programOpts.color,
+};
 
 const language = await import(options.language);
 
