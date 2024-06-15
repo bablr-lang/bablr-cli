@@ -15,10 +15,8 @@ Options:
   -F, --no-format          Produce machine-readable CSTML output
   -f, --format             Pretty-format CSTML output (default: true)
   -v, --verbose            Prints debugging information to stderr
-  -c, --color              Color output using ANSI escapes (default: true)
-  -C, --no-color           Do not color output
-  -d, --detect-color       Only allow color if support is detected (default: true)
-  -D, --no-detect-color    Allow color even if support is not detected
+  -c, --color [WHEN]       When to use ANSI escape colors
+    WHEN: auto | always | never (default: "auto")
   -e, --embedded           Requires quoted input but enables gap parsing
   -h, --help               display help for command
 ```

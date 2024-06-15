@@ -30,9 +30,15 @@ program
 
 const programOpts = program.opts();
 
+if (programOpts.color && !['auto', 'always', 'never'].includes(programOpts.color.toLowerCase())) {
+  throw new Error('invalid value for --color');
+}
+
 const options = {
   ...programOpts,
-  color: (!programOpts.detectColor || colorSupport.hasBasic) && programOpts.color,
+  color:
+    (programOpts.color.toLowerCase() === 'auto' && colorSupport.hasBasic) ||
+    programOpts.color.toLowerCase() === 'always',
 };
 
 const language = await import(options.language);
