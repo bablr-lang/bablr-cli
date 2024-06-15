@@ -17,7 +17,7 @@ Options:
   -v, --verbose            Prints debugging information to stderr
   -c, --color              Color output using ANSI escapes (default: true)
   -C, --no-color           Do not color output
-  -d, --detect-color       Allow color only if support is detected (default: true)
+  -d, --detect-color       Only allow color if support is detected (default: true)
   -D, --no-detect-color    Allow color even if support is not detected
   -e, --embedded           Requires quoted input but enables gap parsing
   -h, --help               display help for command

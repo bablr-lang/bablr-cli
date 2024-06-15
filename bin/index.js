@@ -20,10 +20,11 @@ program
   .option('-F, --no-format', 'Produce machine-readable CSTML output')
   .option('-f, --format', 'Pretty-format CSTML output', true)
   .option('-v, --verbose', 'Prints debugging information to stderr')
-  .option('-c, --color', 'Color output using ANSI escapes', true)
-  .option('-C, --no-color', 'Do not color output')
-  .option('-d, --detect-color', 'Allow color only if support is detected', true)
-  .option('-D, --no-detect-color', 'Allow color even if support is not detected')
+  .option(
+    '-c, --color [WHEN]',
+    'When to use ANSI escape colors. \n  WHEN: auto | always | never',
+    'auto',
+  )
   .option('-e, --embedded', 'Requires quoted input but enables gap parsing')
   .parse(process.argv);
 
