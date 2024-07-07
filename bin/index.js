@@ -9,10 +9,10 @@ import {
   sourceFromReadStream,
   stripTrailingNewline,
 } from '@bablr/helpers/source';
-import { buildDebugEnhancers } from '@bablr/helpers/enhancers';
+import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
-import { generateCSTML } from '../lib/syntax.js';
-import { writeLinesToWritableStream } from '../lib/utils/node.js';
+import { evaluateIO } from '@bablr/io-vm-node';
+import { createPrintCSTMLStrategy } from '../lib/syntax.js';
 
 program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
@@ -37,7 +37,7 @@ if (programOpts.color && !['auto', 'always', 'never'].includes(programOpts.color
 const options = {
   ...programOpts,
   color:
-    (programOpts.color.toLowerCase() === 'auto' && colorSupport.hasBasic && !programOpts.verbose) ||
+    (programOpts.color.toLowerCase() === 'auto' && colorSupport.hasBasic) ||
     programOpts.color.toLowerCase() === 'always',
 };
 
@@ -47,16 +47,12 @@ const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
 };
 
-if (options.verbose && options.color) {
-  throw new Error('TODO support this in a better way than turning off color');
-}
-
-const enhancers = options.verbose ? { ...buildDebugEnhancers(logStderr), agastStrategy: null } : {};
+const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
 
 const rawStream = process.stdin.setEncoding('utf-8');
 
-await writeLinesToWritableStream(
-  generateCSTML(
+await evaluateIO(
+  createPrintCSTMLStrategy(
     streamParse(
       language,
       options.production,
@@ -64,9 +60,8 @@ await writeLinesToWritableStream(
         ? embeddedSourceFromReadStream(rawStream)
         : stripTrailingNewline(sourceFromReadStream(rawStream)),
       {},
-      enhancers,
-    ),
+      { enhancers, emitEffects: true },
+    ).tokens,
     options,
   ),
-  process.stdout,
 );
