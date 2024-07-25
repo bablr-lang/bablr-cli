@@ -4,11 +4,7 @@
 
 import { program } from 'commander';
 import { streamParse } from 'bablr';
-import {
-  embeddedSourceFromReadStream,
-  sourceFromReadStream,
-  stripTrailingNewline,
-} from '@bablr/helpers/source';
+import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
@@ -57,11 +53,15 @@ await evaluateIO(
       language,
       options.production,
       options.embedded
-        ? embeddedSourceFromReadStream(rawStream)
-        : stripTrailingNewline(sourceFromReadStream(rawStream)),
+        ? embeddedSourceFrom(readFromStream(rawStream))
+        : stripTrailingNewline(readFromStream(rawStream)),
       {},
       { enhancers, emitEffects: true },
     ).tokens,
-    options,
+    {
+      emitEffects: !!options.verbose,
+      color: options.color,
+      format: options.format,
+    },
   ),
 );
