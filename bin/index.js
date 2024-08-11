@@ -3,12 +3,13 @@
 /* global process */
 
 import { program } from 'commander';
-import { streamParse } from 'bablr';
+import { streamParse, Context, AgastContext } from 'bablr';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
 import { createPrintCSTMLStrategy } from '../lib/syntax.js';
+import { buildFullyQualifiedSpamMatcher } from '@bablr/agast-vm-helpers';
 
 program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
@@ -39,26 +40,31 @@ const options = {
 
 const language = await import(options.language);
 
+const matcher = buildFullyQualifiedSpamMatcher({}, language.canonicalURL, options.production);
+
 const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
 };
 
 const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
 
+const ctx = Context.from(AgastContext.create(), language, enhancers.bablrProduction);
+
 const rawStream = process.stdin.setEncoding('utf-8');
 
 await evaluateIO(
   createPrintCSTMLStrategy(
     streamParse(
-      language,
-      options.production,
+      ctx,
+      matcher,
       options.embedded
         ? embeddedSourceFrom(readFromStream(rawStream))
         : stripTrailingNewline(readFromStream(rawStream)),
       {},
       { enhancers, emitEffects: true },
-    ).tokens,
+    ),
     {
+      ctx,
       emitEffects: !!options.verbose,
       color: options.color,
       format: options.format,
