@@ -23,7 +23,7 @@
     "@bablr/boot": "0.4.0",
     "@bablr/coroutine": "0.1.0",
     "@bablr/helpers": "0.18.2",
-    "@bablr/language-en-cstml": "0.4.1",
+    "@bablr/language-en-cstml": "0.4.3",
     "@bablr/language-en-bablr-cli-verbose-output": "0.3.1",
     "@iter-tools/imm-stack": "1.1.0",
     "bablr": "0.4.1",
