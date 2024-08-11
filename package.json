@@ -24,7 +24,7 @@
     "@bablr/coroutine": "0.1.0",
     "@bablr/helpers": "0.18.2",
     "@bablr/language-en-cstml": "0.4.1",
-    "@bablr/language-en-bablr-cli-verbose-output": "0.3.0",
+    "@bablr/language-en-bablr-cli-verbose-output": "0.3.1",
     "@iter-tools/imm-stack": "1.1.0",
     "bablr": "0.4.1",
     "color-support": "1.1.3",
