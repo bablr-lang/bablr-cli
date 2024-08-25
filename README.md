@@ -24,7 +24,7 @@ Options:
 ## Example
 
 ```bash
-bablr -l @bablr/language-json -p Expression -f << 'EOF'
+bablr -l @bablr/language-en-json -p Expression -f << 'EOF'
 [
   1,
   true,
@@ -36,7 +36,7 @@ EOF
 Running the above command produces the following output. Note that this is a stream parse so lines of output will appear one by one as fast as the input can be read and parsed.
 
 ```cstml
-<!0:cstml bablr-language='https://github.com/bablr-lang/language-json'>
+<!0:cstml bablr-language='https://github.com/bablr-lang/language-en-json'>
 <>
   <Array>
     openToken:
