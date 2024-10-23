@@ -15,6 +15,7 @@ program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [type]', 'The name of the top production type')
   .option('-f, --format', 'Pretty-format CSTML output', true)
+  .option('-g, --gaps', 'The source and resulting tree may contain gaps')
   .option('-F, --no-format')
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
@@ -40,7 +41,11 @@ const options = {
 
 const language = await import(options.language);
 
-const matcher = buildFullyQualifiedSpamMatcher({}, language.canonicalURL, options.production);
+const matcher = buildFullyQualifiedSpamMatcher(
+  { hasGap: options.gaps },
+  language.canonicalURL,
+  options.production,
+);
 
 const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
