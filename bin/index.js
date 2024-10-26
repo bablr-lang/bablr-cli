@@ -12,6 +12,7 @@ import { createPrintCSTMLStrategy } from '../lib/syntax.js';
 import { buildFullyQualifiedSpamMatcher } from '@bablr/agast-vm-helpers';
 
 program
+  .name('bablr')
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [type]', 'The name of the top production type')
   .option('-f, --format', 'Pretty-format CSTML output', true)
