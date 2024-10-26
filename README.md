@@ -38,60 +38,40 @@ Running the above command produces the following output. Note that this is a str
 ```cstml
 <!0:cstml bablr-language='https://github.com/bablr-lang/language-en-json'>
 <>
+  .:
   <Array>
-    openToken:
-    <~*Punctuator '[' balanced=']' />
-    <#*Space:Space>
-      '\n  '
-    </>
+    openToken: <*Punctuator '[' balanced=']' />
+    <#*Space:Space '\n  ' />
+    separators[]: []
+    elements[]: []
     elements[]:
     <Number span='Number'>
       wholePart:
       <Integer>
-        digits[]:
-        <*Digit>
-          '1'
-        </>
+        signToken: null
+        value: <*UnsignedInteger '1' />
       </>
-      fractionalPart:
-        null
-      exponentPart:
-        null
+      fractionalSeparatorToken: null
+      fractionalPart: null
+      exponentSeparatorToken: null
+      exponentPart: null
     </>
-    separators[]:
-    <~*Punctuator ',' />
-    <#*Space:Space>
-      '\n  '
-    </>
+    separators[]: <*Punctuator ',' />
+    <#*Space:Space '\n  ' />
     elements[]:
     <Boolean>
-      sigilToken:
-      <~*Keyword 'true' />
+      sigilToken: <*Keyword 'true' />
     </>
-    separators[]:
-    <~*Punctuator ',' />
-    <#*Space:Space>
-      '\n  '
-    </>
+    separators[]: <*Punctuator ',' />
+    <#*Space:Space '\n  ' />
     elements[]:
     <String>
-      openToken:
-      <~*Punctuator '"' balanced='"' balancedSpan='String' />
-      content:
-      <*StringContent>
-        '3'
-      </>
-      closeToken:
-      <~*Punctuator '"' balancer />
-      <#*Space:Space>
-        '\n'
-      </>
+      openToken: <*Punctuator '"' balanced='"' balancedSpan='String' />
+      content: <*StringContent '3' />
+      closeToken: <*Punctuator '"' balancer />
+      <#*Space:Space '\n' />
     </>
-    closeToken:
-    <~*Punctuator ']' balancer />
-    <#*Space:Space>
-      '\n'
-    </>
+    closeToken: <*Punctuator ']' balancer />
   </>
 </>
 ```
