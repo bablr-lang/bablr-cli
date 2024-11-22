@@ -9,7 +9,7 @@ import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
 import { createPrintCSTMLStrategy } from '../lib/syntax.js';
-import { buildFullyQualifiedSpamMatcher } from '@bablr/agast-vm-helpers';
+import { buildFullyQualifiedSpamMatcher } from '@bablr/helpers/builders';
 
 program
   .name('bablr')
