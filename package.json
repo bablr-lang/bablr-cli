@@ -22,7 +22,7 @@
     "@bablr/io-vm-node": "^0.5.0",
     "@bablr/boot": "^0.6.0",
     "@bablr/coroutine": "0.1.0",
-    "@bablr/helpers": "^0.20.0",
+    "@bablr/helpers": "^0.20.5",
     "@bablr/language-en-cstml": "^0.6.0",
     "@bablr/language-en-bablr-cli-verbose-output": "^0.5.0",
     "@iter-tools/imm-stack": "1.1.0",
