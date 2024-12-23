@@ -3,7 +3,7 @@
 /* global process */
 
 import { program } from 'commander';
-import { streamParse, Context, AgastContext } from 'bablr';
+import { streamParse, Context } from 'bablr';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
@@ -54,7 +54,7 @@ const logStderr = (...args) => {
 
 const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
 
-const ctx = Context.from(AgastContext.create(), language, enhancers.bablrProduction);
+const ctx = Context.from(language, enhancers.bablrProduction);
 
 const rawStream = process.stdin.setEncoding('utf-8');
 
