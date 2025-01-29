@@ -3,13 +3,18 @@
 /* global process */
 
 import { program } from 'commander';
-import { streamParse, Context, AgastContext } from 'bablr';
+import { streamParse, Context } from 'bablr';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
-import { createPrintCSTMLStrategy } from '../lib/syntax.js';
-import { buildFullyQualifiedSpamMatcher } from '@bablr/helpers/builders';
+import { generateCSTML } from '../lib/syntax.js';
+import {
+  buildBasicNodeMatcher,
+  buildOpenNodeMatcher,
+  buildPropertyMatcher,
+} from '@bablr/helpers/builders';
+import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
 
 program
   .name('bablr')
@@ -42,10 +47,11 @@ const options = {
 
 const language = await import(options.language);
 
-const matcher = buildFullyQualifiedSpamMatcher(
-  { hasGap: options.gaps },
-  language.canonicalURL,
-  options.production,
+const matcher = buildPropertyMatcher(
+  null,
+  buildBasicNodeMatcher(
+    buildOpenNodeMatcher({ hasGap: options.gaps }, language.canonicalURL, options.production),
+  ),
 );
 
 const logStderr = (...args) => {
@@ -54,12 +60,12 @@ const logStderr = (...args) => {
 
 const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
 
-const ctx = Context.from(AgastContext.create(), language, enhancers.bablrProduction);
+const ctx = Context.from(language, enhancers.bablrProduction);
 
 const rawStream = process.stdin.setEncoding('utf-8');
 
-await evaluateIO(
-  createPrintCSTMLStrategy(
+const output = evaluateIO(() =>
+  generateCSTML(
     streamParse(
       ctx,
       matcher,
@@ -71,9 +77,10 @@ await evaluateIO(
     ),
     {
       ctx,
-      emitEffects: !!options.verbose,
       color: options.color,
       format: options.format,
     },
   ),
 );
+
+await evaluateReturnAsync(output);
