@@ -14,7 +14,7 @@ import {
   buildOpenNodeMatcher,
   buildPropertyMatcher,
 } from '@bablr/helpers/builders';
-import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
+import { buildEmbeddedMatcher, evaluateReturnAsync } from '@bablr/agast-helpers/tree';
 
 program
   .name('bablr')
@@ -47,10 +47,12 @@ const options = {
 
 const language = await import(options.language);
 
-const matcher = buildPropertyMatcher(
-  null,
-  buildBasicNodeMatcher(
-    buildOpenNodeMatcher({ hasGap: options.gaps }, language.canonicalURL, options.production),
+const matcher = buildEmbeddedMatcher(
+  buildPropertyMatcher(
+    null,
+    buildBasicNodeMatcher(
+      buildOpenNodeMatcher({ hasGap: options.gaps }, language.canonicalURL, options.production),
+    ),
   ),
 );
 
@@ -79,6 +81,7 @@ const output = evaluateIO(() =>
       ctx,
       color: options.color,
       format: options.format,
+      emitEffects: true,
     },
   ),
 );
