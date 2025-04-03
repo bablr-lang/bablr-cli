@@ -14,7 +14,9 @@ import {
   buildOpenNodeMatcher,
   buildPropertyMatcher,
 } from '@bablr/helpers/builders';
-import { buildEmbeddedMatcher, evaluateReturnAsync } from '@bablr/agast-helpers/tree';
+import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
+import { buildEmbeddedMatcher } from '@bablr/agast-vm-helpers/builders';
+import { o } from '@bablr/helpers/grammar';
 
 program
   .name('bablr')
@@ -74,7 +76,7 @@ const output = evaluateIO(() =>
       options.embedded
         ? embeddedSourceFrom(readFromStream(rawStream))
         : stripTrailingNewline(readFromStream(rawStream)),
-      {},
+      o({}),
       { enhancers, emitEffects: true },
     ),
     {
