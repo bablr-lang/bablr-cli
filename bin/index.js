@@ -17,6 +17,7 @@ import {
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
 import { buildEmbeddedMatcher } from '@bablr/agast-vm-helpers/builders';
 import { o } from '@bablr/helpers/grammar';
+import { resolveTags } from '@bablr/helpers/stream';
 
 program
   .name('bablr')
@@ -70,14 +71,17 @@ const rawStream = process.stdin.setEncoding('utf-8');
 
 const output = evaluateIO(() =>
   generateCSTML(
-    streamParse(
+    resolveTags(
       ctx,
-      matcher,
-      options.embedded
-        ? embeddedSourceFrom(readFromStream(rawStream))
-        : stripTrailingNewline(readFromStream(rawStream)),
-      o({}),
-      { enhancers, emitEffects: true },
+      streamParse(
+        ctx,
+        matcher,
+        options.embedded
+          ? embeddedSourceFrom(readFromStream(rawStream))
+          : stripTrailingNewline(readFromStream(rawStream)),
+        o({}),
+        { enhancers, emitEffects: true },
+      ),
     ),
     {
       ctx,
