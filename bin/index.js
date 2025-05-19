@@ -23,7 +23,7 @@ program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [type]', 'The name of the top production type')
   .option('-f, --format', 'Pretty-format CSTML output', true)
-  .option('-g, --has-gaps', 'Sets hasGap flag on root matcher')
+  .option('-g, --has-gap', 'Sets hasGap flag on root matcher')
   .option('-r, --fragment', 'Sets fragment flag on root matcher')
   .option('-t --token', 'Sets token flag on root matcher')
   .option('-o --cover', 'Sets cover flag on root matcher')
@@ -58,7 +58,7 @@ const matcher = buildEmbeddedMatcher(
     buildBasicNodeMatcher(
       buildOpenNodeMatcher(
         {
-          hasGap: options.gaps,
+          hasGap: options.hasGap,
           fragment: options.fragment,
           token: options.token,
           cover: options.cover,
