@@ -11,6 +11,7 @@ import { evaluateIO } from '@bablr/io-vm-node';
 import { generateCSTML } from '../lib/syntax.js';
 import {
   buildBasicNodeMatcher,
+  buildNodeFlags,
   buildOpenNodeMatcher,
   buildPropertyMatcher,
 } from '@bablr/helpers/builders';
@@ -57,12 +58,12 @@ const matcher = buildEmbeddedMatcher(
     null,
     buildBasicNodeMatcher(
       buildOpenNodeMatcher(
-        {
+        buildNodeFlags({
           hasGap: options.gaps,
           fragment: options.fragment,
           token: options.token,
           cover: options.cover,
-        },
+        }),
         language.canonicalURL,
         options.production,
       ),
