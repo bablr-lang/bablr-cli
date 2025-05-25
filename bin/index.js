@@ -65,7 +65,6 @@ const matcher = buildEmbeddedMatcher(
           token: options.token,
           cover: options.cover,
         }),
-        language.canonicalURL,
         options.production,
       ),
     ),
