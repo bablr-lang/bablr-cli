@@ -3,7 +3,7 @@
 /* global process */
 
 import { program } from 'commander';
-import { streamParse, Context } from 'bablr';
+import { streamParse } from 'bablr';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
@@ -56,6 +56,7 @@ const language = await import(options.language);
 const matcher = buildEmbeddedMatcher(
   buildPropertyMatcher(
     null,
+    null,
     buildBasicNodeMatcher(
       buildOpenNodeMatcher(
         buildNodeFlags({
@@ -77,14 +78,12 @@ const logStderr = (...args) => {
 
 const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
 
-const ctx = Context.from(language, enhancers.bablrProduction);
-
 const rawStream = process.stdin.setEncoding('utf-8');
 
 const output = evaluateIO(() =>
   generateCSTML(
     streamParse(
-      ctx,
+      language,
       matcher,
       options.embedded
         ? embeddedSourceFrom(readFromStream(rawStream))
@@ -93,7 +92,6 @@ const output = evaluateIO(() =>
       { enhancers, emitEffects: true },
     ),
     {
-      ctx,
       color: options.color,
       format: options.format,
       emitEffects: true,
