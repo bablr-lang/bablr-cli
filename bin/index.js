@@ -24,7 +24,7 @@ program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [type]', 'The name of the top production type')
   .option('-f, --format', 'Pretty-format CSTML output', true)
-  .option('-g, --has-gap', 'Sets hasGap flag on root matcher')
+  .option('-g, --gaps', 'Sets hasGap flag on root matcher')
   .option('-r, --fragment', 'Sets fragment flag on root matcher')
   .option('-t --token', 'Sets token flag on root matcher')
   .option('-o --cover', 'Sets cover flag on root matcher')
@@ -60,7 +60,7 @@ const matcher = buildEmbeddedMatcher(
     buildBasicNodeMatcher(
       buildOpenNodeMatcher(
         buildNodeFlags({
-          hasGap: options.hasGap,
+          hasGap: options.gaps,
           fragment: options.fragment,
           token: options.token,
           cover: options.cover,
@@ -88,7 +88,12 @@ const output = evaluateIO(() =>
         ? embeddedSourceFrom(readFromStream(rawStream))
         : stripTrailingNewline(readFromStream(rawStream)),
       o({}),
-      { enhancers, emitEffects: true },
+      {
+        enhancers,
+        emitEffects: true,
+        holdShiftedNodes: !options.gaps,
+        holdUndefinedAttributes: !options.gaps,
+      },
     ),
     {
       color: options.color,
