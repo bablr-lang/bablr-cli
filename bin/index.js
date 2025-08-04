@@ -53,23 +53,25 @@ const options = {
 
 const language = await import(options.language);
 
-const matcher = buildEmbeddedMatcher(
-  buildPropertyMatcher(
-    null,
-    null,
-    buildBasicNodeMatcher(
-      buildOpenNodeMatcher(
-        buildNodeFlags({
-          hasGap: options.gaps,
-          fragment: options.fragment,
-          token: options.token,
-          cover: options.cover,
-        }),
-        options.production,
+const matcher = options.production
+  ? buildEmbeddedMatcher(
+      buildPropertyMatcher(
+        null,
+        null,
+        buildBasicNodeMatcher(
+          buildOpenNodeMatcher(
+            buildNodeFlags({
+              hasGap: options.gaps,
+              fragment: options.fragment,
+              token: options.token,
+              cover: options.cover,
+            }),
+            options.production,
+          ),
+        ),
       ),
-    ),
-  ),
-);
+    )
+  : language.defaultMatcher;
 
 const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
