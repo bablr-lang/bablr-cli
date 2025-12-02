@@ -51,7 +51,7 @@ const options = {
     programOpts.color.toLowerCase() === 'always',
 };
 
-const language = await import(options.language);
+const { default: language } = await import(options.language);
 
 const matcher = options.production
   ? buildEmbeddedMatcher(
