@@ -10,9 +10,9 @@ import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
 import { generateCSTML } from '../lib/syntax.js';
 import {
-  buildBasicNodeMatcher,
+  buildTreeNodeMatcher,
   buildNodeFlags,
-  buildOpenNodeMatcher,
+  buildTreeNodeMatcherOpen,
   buildPropertyMatcher,
 } from '@bablr/helpers/builders';
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
@@ -58,8 +58,8 @@ const matcher = options.production
       buildPropertyMatcher(
         null,
         null,
-        buildBasicNodeMatcher(
-          buildOpenNodeMatcher(
+        buildTreeNodeMatcher(
+          buildTreeNodeMatcherOpen(
             buildNodeFlags({
               hasGap: options.gaps,
               fragment: options.fragment,
