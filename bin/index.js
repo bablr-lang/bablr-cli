@@ -14,6 +14,7 @@ import {
   buildNodeFlags,
   buildTreeNodeMatcherOpen,
   buildPropertyMatcher,
+  buildBoundNodeMatcher,
 } from '@bablr/helpers/builders';
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
 import { buildEmbeddedMatcher } from '@bablr/agast-vm-helpers/builders';
@@ -22,7 +23,7 @@ import { o } from '@bablr/helpers/grammar';
 program
   .name('bablr')
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
-  .option('-p, --production [type]', 'The name of the top production type')
+  .option('-p, --production [name]', 'The name of the top production name')
   .option('-f, --format', 'Pretty-format CSTML output', true)
   .option('-g, --gaps', 'Sets hasGap flag on root matcher')
   .option('-r, --fragment', 'Sets fragment flag on root matcher')
@@ -57,16 +58,18 @@ const matcher = options.production
   ? buildEmbeddedMatcher(
       buildPropertyMatcher(
         null,
-        null,
-        buildTreeNodeMatcher(
-          buildTreeNodeMatcherOpen(
-            buildNodeFlags({
-              hasGap: options.gaps,
-              fragment: options.fragment,
-              token: options.token,
-              cover: options.cover,
-            }),
-            options.production,
+        buildBoundNodeMatcher(
+          [],
+          buildTreeNodeMatcher(
+            buildTreeNodeMatcherOpen(
+              buildNodeFlags({
+                hasGap: options.gaps,
+                fragment: options.fragment,
+                token: options.token,
+                cover: options.cover,
+              }),
+              options.production,
+            ),
           ),
         ),
       ),
@@ -80,6 +83,8 @@ const logStderr = (...args) => {
 const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
 
 const rawStream = process.stdin.setEncoding('utf-8');
+
+Error.stackTraceLimit = 20;
 
 const output = evaluateIO(() =>
   generateCSTML(
