@@ -105,7 +105,7 @@ const output = evaluateIO(() =>
     {
       color: options.color,
       format: options.format,
-      emitEffects: true,
+      verbose: options.verbose,
     },
   ),
 );
