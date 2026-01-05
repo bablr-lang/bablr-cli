@@ -2,6 +2,7 @@
 
 /* global process */
 
+import { spam as m } from '@bablr/boot';
 import { program } from 'commander';
 import { streamParse } from 'bablr';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
@@ -9,26 +10,16 @@ import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
 import { generateCSTML } from '../lib/syntax.js';
-import {
-  buildTreeNodeMatcher,
-  buildNodeFlags,
-  buildTreeNodeMatcherOpen,
-  buildPropertyMatcher,
-  buildBoundNodeMatcher,
-} from '@bablr/helpers/builders';
+import { buildString } from '@bablr/helpers/builders';
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
-import { buildEmbeddedMatcher } from '@bablr/agast-vm-helpers/builders';
 import { o } from '@bablr/helpers/grammar';
 
 program
   .name('bablr')
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
-  .option('-p, --production [name]', 'The name of the top production name')
+  .option('-p, --production [name]', 'Shorthand: sets the named node matcher as root matcher')
+  .option('-m, --matcher [matcher]', 'Sets the root matcher')
   .option('-f, --format', 'Pretty-format CSTML output', true)
-  .option('-g, --gaps', 'Sets hasGap flag on root matcher')
-  .option('-r, --fragment', 'Sets fragment flag on root matcher')
-  .option('-t --token', 'Sets token flag on root matcher')
-  .option('-o --cover', 'Sets cover flag on root matcher')
   .option('-F, --no-format')
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
@@ -54,26 +45,10 @@ const options = {
 
 const { default: language } = await import(options.language);
 
-const matcher = options.production
-  ? buildEmbeddedMatcher(
-      buildPropertyMatcher(
-        null,
-        buildBoundNodeMatcher(
-          [],
-          buildTreeNodeMatcher(
-            buildTreeNodeMatcherOpen(
-              buildNodeFlags({
-                hasGap: options.gaps,
-                fragment: options.fragment,
-                token: options.token,
-                cover: options.cover,
-              }),
-              options.production,
-            ),
-          ),
-        ),
-      ),
-    )
+const matcher = options.matcher
+  ? m({ raw: [options.matcher] })
+  : options.production
+  ? m`<${buildString(options.production)} />`
   : language.defaultMatcher;
 
 const logStderr = (...args) => {
