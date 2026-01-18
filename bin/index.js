@@ -10,7 +10,7 @@ import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluateIO } from '@bablr/io-vm-node';
 import { generateCSTML } from '../lib/syntax.js';
-import { buildString } from '@bablr/helpers/builders';
+import { buildIdentifier } from '@bablr/helpers/builders';
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
 import { o } from '@bablr/helpers/grammar';
 
@@ -48,7 +48,7 @@ const { default: language } = await import(options.language);
 const matcher = options.matcher
   ? m({ raw: [options.matcher] })
   : options.production
-  ? m`<${buildString(options.production)} />`
+  ? m`<${buildIdentifier(options.production)} />`
   : language.defaultMatcher;
 
 const logStderr = (...args) => {
