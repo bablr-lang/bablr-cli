@@ -17,7 +17,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@bablr/agast-helpers": "0.10.0",
+    "@bablr/agast-helpers": "0.10.1",
     "@bablr/agast-vm-helpers": "0.10.0",
     "@bablr/io-vm-node": "0.9.0",
     "@bablr/boot": "0.11.0",
