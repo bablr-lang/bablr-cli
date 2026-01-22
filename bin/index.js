@@ -4,7 +4,7 @@
 
 import { spam as m } from '@bablr/boot';
 import { program } from 'commander';
-import { streamParse } from 'bablr';
+import { buildModule } from 'bablr/enhanceable';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
@@ -56,6 +56,8 @@ const logStderr = (...args) => {
 };
 
 const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
+
+let { streamParse } = buildModule(enhancers);
 
 const rawStream = process.stdin.setEncoding('utf-8');
 
