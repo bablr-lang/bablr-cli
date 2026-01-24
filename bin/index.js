@@ -77,6 +77,7 @@ const output = evaluateIO(() =>
         emitEffects: true,
         holdShiftedNodes: !options.gaps,
         holdUndefinedAttributes: !options.gaps,
+        tree: false,
       },
     ),
     {
