@@ -19,6 +19,8 @@ program
   .option('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [name]', 'Shorthand: sets the named node matcher as root matcher')
   .option('-m, --matcher [matcher]', 'Sets the root matcher')
+  .option('-s, --shift', 'Allows shifting')
+  .option('-S, --no-shift', 'Disallows shifting')
   .option('-f, --format', 'Pretty-format CSTML output', true)
   .option('-F, --no-format')
   .option('-v, --verbose', 'Prints debugging information to stderr')
@@ -75,7 +77,7 @@ const output = evaluateIO(() =>
       {
         enhancers,
         emitEffects: true,
-        holdShiftedNodes: !options.gaps,
+        holdShiftedNodes: !options.shift,
         // holdUndefinedAttributes: !options.gaps,
         tree: false,
       },
