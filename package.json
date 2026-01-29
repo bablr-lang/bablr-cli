@@ -1,7 +1,7 @@
 {
   "name": "@bablr/cli",
   "description": "CLI for running BABLR parsers",
-  "version": "0.0.0",
+  "version": "0.11.12",
   "author": "Conrad Buck<conartist6@gmail.com>",
   "type": "module",
   "files": [
@@ -23,8 +23,8 @@
     "@bablr/boot": "0.11.3",
     "@bablr/coroutine": "0.1.0",
     "@bablr/helpers": "0.25.2",
-    "@bablr/language-en-cstml": "0.12.4",
-    "@bablr/language-en-bablr-cli-verbose-output": "0.10.5",
+    "@bablr/language-en-cstml": "0.12.5",
+    "@bablr/language-en-bablr-cli-verbose-output": "0.10.6",
     "@iter-tools/imm-stack": "1.2.0",
     "bablr": "0.11.3",
     "color-support": "1.1.3",
