@@ -2,6 +2,7 @@
 
 /* global process */
 
+import '@bablr/deep-freeze/register';
 import { spam as m } from '@bablr/boot';
 import { program } from 'commander';
 import { buildModule } from 'bablr/enhanceable';
