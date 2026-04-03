@@ -9,8 +9,8 @@ import { buildModule } from 'bablr/enhanceable';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
-import { evaluateIO } from '@bablr/io-vm-node';
-import { generateCSTML } from '../lib/syntax.js';
+import { evaluate } from '@bablr/io-vm-node';
+import { generateOutput, printEnhancer } from '../lib/syntax.js';
 import { buildIdentifier } from '@bablr/helpers/builders';
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
 import { o } from '@bablr/helpers/grammar';
@@ -66,29 +66,31 @@ const rawStream = process.stdin.setEncoding('utf-8');
 
 Error.stackTraceLimit = 20;
 
-const output = evaluateIO(() =>
-  generateCSTML(
-    streamParse(
-      language,
-      matcher,
-      options.embedded
-        ? embeddedSourceFrom(readFromStream(rawStream))
-        : stripTrailingNewline(readFromStream(rawStream)),
-      o({}),
-      {
-        enhancers,
-        emitEffects: true,
-        holdShiftedNodes: !options.shift,
-        // holdUndefinedAttributes: !options.gaps,
-        tree: false,
-      },
-    ),
-    {
-      color: options.color,
-      format: options.format,
-      verbose: options.verbose,
-    },
+await evaluateReturnAsync(
+  evaluate(
+    () =>
+      generateOutput(
+        streamParse(
+          language,
+          matcher,
+          options.embedded
+            ? embeddedSourceFrom(readFromStream(rawStream))
+            : stripTrailingNewline(readFromStream(rawStream)),
+          o({}),
+          {
+            enhancers,
+            emitEffects: true,
+            holdShiftedNodes: !options.shift,
+            // holdUndefinedAttributes: !options.gaps,
+            tree: false,
+          },
+        ),
+        {
+          color: options.color,
+          format: options.format,
+          verbose: options.verbose,
+        },
+      ),
+    { printEnhancer },
   ),
 );
-
-await evaluateReturnAsync(output);
