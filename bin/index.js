@@ -3,7 +3,6 @@
 /* global process */
 
 import '@bablr/deep-freeze/register';
-import { m } from '@bablr/boot';
 import { program } from 'commander';
 import { buildModule } from 'bablr/enhanceable';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
@@ -13,7 +12,7 @@ import { evaluate } from '@bablr/io-vm-node';
 import { generateOutput, printEnhancer } from '../lib/syntax.js';
 import { buildIdentifier } from '@bablr/helpers/builders';
 import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
-import { o } from '@bablr/helpers/grammar';
+import { o, m } from '@bablr/helpers/grammar';
 
 program
   .name('bablr')
