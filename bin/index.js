@@ -2,7 +2,6 @@
 
 /* global process */
 
-import '@bablr/deep-freeze/register';
 import { program } from 'commander';
 import { buildModule } from 'bablr/enhanceable';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
