@@ -76,20 +76,20 @@ await evaluateReturn(
             ? embeddedSourceFrom(readFromStream(rawStream))
             : stripTrailingNewline(readFromStream(rawStream)),
           o({}),
-          {
+          freeze({
             enhancers,
             emitEffects: true,
             holdShiftedNodes: !options.shift,
             // holdUndefinedAttributes: !options.gaps,
             tree: false,
-          },
+          }),
         ),
-        {
+        freeze({
           color: options.color,
           format: options.format,
           verbose: options.verbose,
-        },
+        }),
       ),
-    { printEnhancer },
+    freeze({ printEnhancer }),
   ),
 );
