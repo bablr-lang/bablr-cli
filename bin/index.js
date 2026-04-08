@@ -10,8 +10,9 @@ import colorSupport from 'color-support';
 import { evaluate } from '@bablr/io-vm-node';
 import { generateOutput, printEnhancer } from '../lib/syntax.js';
 import { buildIdentifier } from '@bablr/helpers/builders';
-import { evaluateReturnAsync } from '@bablr/agast-helpers/tree';
+import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
+import { freeze } from '@bablr/agast-helpers/object';
 
 program
   .name('bablr')
@@ -56,7 +57,7 @@ const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
 };
 
-const enhancers = options.verbose ? { ...debugEnhancers, agast: null } : {};
+const enhancers = freeze(options.verbose ? { ...debugEnhancers, agast: null } : {});
 
 let { streamParse } = buildModule(enhancers);
 
@@ -64,7 +65,7 @@ const rawStream = process.stdin.setEncoding('utf-8');
 
 Error.stackTraceLimit = 20;
 
-await evaluateReturnAsync(
+await evaluateReturn(
   evaluate(
     () =>
       generateOutput(
