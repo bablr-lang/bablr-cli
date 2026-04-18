@@ -85,11 +85,10 @@ await evaluateReturn(
           }),
         ),
         freeze({
-          color: options.color,
           format: options.format,
           verbose: options.verbose,
         }),
       ),
-    freeze({ printEnhancer }),
+    color ? freeze({ printEnhancer }) : undefined,
   ),
 );
