@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 /* global process */
-
+import '@bablr/record';
 import { program } from 'commander';
 import { buildModule } from 'bablr/enhanceable';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
@@ -89,6 +89,6 @@ await evaluateReturn(
           verbose: options.verbose,
         }),
       ),
-    color ? freeze({ printEnhancer }) : undefined,
+    options.color ? freeze({ printEnhancer }) : undefined,
   ),
 );
