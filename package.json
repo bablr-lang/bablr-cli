@@ -20,7 +20,6 @@
     "@bablr/agast-helpers": "0.10.10",
     "@bablr/agast-vm-helpers": "0.10.5",
     "@bablr/io-vm-node": "0.9.2",
-    "@bablr/boot": "0.11.4",
     "@bablr/record": "1.0.0",
     "@bablr/helpers": "0.25.5",
     "@bablr/language-en-cstml": "0.12.6",

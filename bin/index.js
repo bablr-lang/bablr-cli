@@ -9,7 +9,6 @@ import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluate } from '@bablr/io-vm-node';
 import { generateOutput, printEnhancer } from '../lib/syntax.js';
-import { buildIdentifier } from '@bablr/helpers/builders';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
 import { freeze } from '@bablr/agast-helpers/object';
@@ -50,7 +49,7 @@ const { default: language } = await import(options.language);
 const matcher = options.matcher
   ? m({ raw: [options.matcher] })
   : options.production
-  ? m`<${buildIdentifier(options.production)} />`
+  ? m`<${options.production} />`
   : language.defaultMatcher;
 
 const logStderr = (...args) => {
