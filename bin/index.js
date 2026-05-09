@@ -8,10 +8,10 @@ import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import colorSupport from 'color-support';
 import { evaluate } from '@bablr/io-vm-node';
-import { generateOutput, printEnhancer } from '../lib/syntax.js';
+import { writeOutput, style } from '../lib/syntax.js';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
-import { freeze } from '@bablr/agast-helpers/object';
+import { freezeRecord } from '@bablr/agast-helpers/object';
 
 program
   .name('bablr')
@@ -56,7 +56,7 @@ const logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
 };
 
-const enhancers = freeze(options.verbose ? { ...debugEnhancers, agast: null } : {});
+const enhancers = freezeRecord(options.verbose ? { ...debugEnhancers, agast: null } : {});
 
 let { streamParse } = buildModule(enhancers);
 
@@ -65,29 +65,33 @@ const rawStream = process.stdin.setEncoding('utf-8');
 Error.stackTraceLimit = 20;
 
 await evaluateReturn(
-  evaluate(
-    () =>
-      generateOutput(
-        streamParse(
-          language,
-          matcher,
-          options.embedded
-            ? embeddedSourceFrom(readFromStream(rawStream))
-            : stripTrailingNewline(readFromStream(rawStream)),
-          o({}),
-          freeze({
-            enhancers,
-            emitEffects: true,
-            holdShiftedNodes: !options.shift,
-            // holdUndefinedAttributes: !options.gaps,
-            tree: false,
-          }),
-        ),
-        freeze({
-          format: options.format,
-          verbose: options.verbose,
-        }),
-      ),
-    options.color ? freeze({ printEnhancer }) : undefined,
-  ),
+  evaluate(() => {
+    let tags = streamParse(
+      language,
+      matcher,
+      options.embedded
+        ? embeddedSourceFrom(readFromStream(rawStream))
+        : stripTrailingNewline(readFromStream(rawStream)),
+      o({}),
+      freezeRecord({
+        enhancers,
+        emitEffects: true,
+        holdShiftedNodes: !options.shift,
+        // holdUndefinedAttributes: !options.gaps,
+        tree: false,
+      }),
+    );
+
+    if (options.color) {
+      tags = style(tags);
+    }
+
+    return writeOutput(
+      tags,
+      freezeRecord({
+        format: options.format,
+        verbose: options.verbose,
+      }),
+    );
+  }),
 );
