@@ -12,6 +12,7 @@ import { writeOutput, style } from '../lib/syntax.js';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
 import { freezeRecord } from '@bablr/agast-helpers/object';
+import { transformStream } from '@bablr/agast-helpers/stream';
 
 program
   .name('bablr')
@@ -75,23 +76,27 @@ await evaluateReturn(
       o({}),
       freezeRecord({
         enhancers,
-        emitEffects: true,
+        emitEffects: !!options.verbose,
         holdShiftedNodes: !options.shift,
         // holdUndefinedAttributes: !options.gaps,
         tree: false,
       }),
     );
 
+    let printed = transformStream(tags, 1, (tags) =>
+      writeOutput(
+        tags,
+        freezeRecord({
+          format: options.format,
+          indent: '  ',
+        }),
+      ),
+    );
+
     if (options.color) {
-      tags = style(tags);
+      printed = style(printed);
     }
 
-    return writeOutput(
-      tags,
-      freezeRecord({
-        format: options.format,
-        verbose: options.verbose,
-      }),
-    );
+    return printed;
   }),
 );
