@@ -13,6 +13,7 @@ import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
 import { freezeRecord } from '@bablr/agast-helpers/object';
 import { transformStream } from '@bablr/agast-helpers/stream';
+import { readFile, decodeUTF8 } from '@bablr/fs';
 
 program
   .name('bablr')
@@ -21,11 +22,11 @@ program
   .option('-m, --matcher [matcher]', 'Sets the root matcher')
   .option('-s, --shift', 'Allows shifting')
   .option('-S, --no-shift', 'Disallows shifting')
-  .option('-f, --format', 'Pretty-format CSTML output', true)
-  .option('-F, --no-format')
+  .option('-f, --file <file>', 'Reads input from a file rather than from std in')
+  .option('-c, --compact', 'Output CSTML on one line without spaces')
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
-    '-c, --color [WHEN]',
+    '--color [WHEN]',
     'When to use ANSI escape colors \n  WHEN: "auto" | "always" | "never"',
     'auto',
   )
@@ -65,14 +66,16 @@ const rawStream = process.stdin.setEncoding('utf-8');
 
 Error.stackTraceLimit = 20;
 
+let input = options.file
+  ? decodeUTF8(readFile(options.file))
+  : stripTrailingNewline(readFromStream(rawStream));
+
 await evaluateReturn(
   evaluate(() => {
     let tags = streamParse(
       language,
       matcher,
-      options.embedded
-        ? embeddedSourceFrom(readFromStream(rawStream))
-        : stripTrailingNewline(readFromStream(rawStream)),
+      options.embedded ? embeddedSourceFrom(input) : input,
       o({}),
       freezeRecord({
         enhancers,
@@ -87,7 +90,7 @@ await evaluateReturn(
       writeOutput(
         tags,
         freezeRecord({
-          format: options.format,
+          compact: options.compact,
           indent: '  ',
         }),
       ),
