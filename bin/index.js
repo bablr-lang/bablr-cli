@@ -12,7 +12,7 @@ import { writeOutput, style } from '../lib/syntax.js';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
 import { freezeRecord } from '@bablr/agast-helpers/object';
-import { transformStream } from '@bablr/agast-helpers/stream';
+import { hoistTrivia, transformStream } from '@bablr/agast-helpers/stream';
 import { readFile, decodeUTF8 } from '@bablr/fs';
 
 program
@@ -22,6 +22,8 @@ program
   .option('-m, --matcher [matcher]', 'Sets the root matcher')
   .option('-s, --shift', 'Allows shifting')
   .option('-S, --no-shift', 'Disallows shifting')
+  .option('-h, --hoist', 'Hoists content out of covers, emitting only nodes', true)
+  .option('-H, --no-hoist', 'Emits regular nodes and cover nodes')
   .option('-f, --file <file>', 'Reads input from a file rather than from std in')
   .option('-c, --compact', 'Output CSTML on one line without spaces')
   .option('-v, --verbose', 'Prints debugging information to stderr')
@@ -85,6 +87,10 @@ await evaluateReturn(
         tree: false,
       }),
     );
+
+    if (options.hoist) {
+      tags = hoistTrivia(tags);
+    }
 
     let printed = transformStream(tags, 1, (tags) =>
       writeOutput(
