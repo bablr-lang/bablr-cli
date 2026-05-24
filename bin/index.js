@@ -12,7 +12,7 @@ import { writeOutput, style } from '../lib/syntax.js';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { o, m } from '@bablr/helpers/grammar';
 import { freezeRecord } from '@bablr/agast-helpers/object';
-import { hoistTrivia, transformStream } from '@bablr/agast-helpers/stream';
+import { hoistTrivia, transformStream, transformStreams } from '@bablr/agast-helpers/stream';
 import { readFile, decodeUTF8 } from '@bablr/fs';
 
 program
@@ -103,7 +103,7 @@ await evaluateReturn(
     );
 
     if (options.color) {
-      printed = style(printed);
+      printed = transformStreams(printed, (tags) => style(tags));
     }
 
     return printed;
