@@ -17,7 +17,7 @@ import { readFile, decodeUTF8 } from '@bablr/fs';
 
 program
   .name('bablr')
-  .option('-l, --language [URL]', 'The URL of the top BABLR language')
+  .requiredOption('-l, --language [URL]', 'The URL of the top BABLR language')
   .option('-p, --production [name]', 'Shorthand: sets the named node matcher as root matcher')
   .option('-m, --matcher [matcher]', 'Sets the root matcher')
   .option('-s, --shift', 'Allows shifting')
