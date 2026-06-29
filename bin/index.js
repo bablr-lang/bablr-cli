@@ -26,7 +26,8 @@ program
   .option('-S, --no-shift', 'Disallows shifting')
   .option('-h, --hoist', 'Hoists content out of covers, emitting only nodes', true)
   .option('-H, --no-hoist', 'Emits regular nodes and cover nodes')
-  .option('-f, --file <file>', 'Reads input from a file rather than from std in')
+  .option('-f, --file <file>', 'Reads input from a file')
+  .option('-i, --interactive', 'Reads input from standard in')
   .option('-c, --compact', 'Output CSTML on one line without spaces')
   .option('-v, --verbose', 'Prints debugging information to stderr')
   .option(
@@ -50,6 +51,12 @@ let options = {
     programOpts.color.toLowerCase() === 'always',
 };
 
+if (options.file && options.interactive) {
+  throw new Error('--file and --interactive are exclusive options');
+} else if (!options.file && !options.interactive && process.stdin.isTTY) {
+  throw new Error('No input given');
+}
+
 let { default: language } = await import(
   './'.includes(options.language[0]) ? resolve(options.language) : options.language
 );
@@ -60,7 +67,7 @@ if (options.matcher) {
   try {
     parsedMatcher = m({ raw: [options.matcher] });
   } catch (e) {
-    throw new Error('Matcher specified but could not be parsed', { cause: e });
+    throw new Error('Matcher given but could not be parsed', { cause: e });
   }
 }
 
@@ -71,9 +78,7 @@ let matcher = parsedMatcher
   : language.defaultMatcher;
 
 if (!matcher) {
-  throw new Error(
-    'No matcher specified with -m or -p, and no default matcher specified by language',
-  );
+  throw new Error('No matcher given with -m or -p, and no default matcher given by language');
 }
 
 let logStderr = (...args) => {
