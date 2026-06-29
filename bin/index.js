@@ -6,10 +6,12 @@ import { program } from 'commander';
 import { buildModule } from 'bablr/enhanceable';
 import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr/helpers/source';
 import { debugEnhancers } from '@bablr/helpers/enhancers';
+import { resolve } from 'node:path';
 import colorSupport from 'color-support';
 import { evaluate } from '@bablr/io-vm-node';
 import { writeOutput, style } from '../lib/syntax.js';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
+import { printIdentifier } from '@bablr/agast-helpers/print';
 import { o, m } from '@bablr/helpers/grammar';
 import { freezeRecord } from '@bablr/agast-helpers/object';
 import { hoistTrivia, transformStream, transformStreams } from '@bablr/agast-helpers/stream';
@@ -35,36 +37,54 @@ program
   .option('-e, --embedded', 'Requires quoted input but enables gap parsing')
   .parse(process.argv);
 
-const programOpts = program.opts();
+let programOpts = program.opts();
 
 if (programOpts.color && !['auto', 'always', 'never'].includes(programOpts.color.toLowerCase())) {
   throw new Error('invalid value for --color');
 }
 
-const options = {
+let options = {
   ...programOpts,
   color:
     (programOpts.color.toLowerCase() === 'auto' && colorSupport.hasBasic) ||
     programOpts.color.toLowerCase() === 'always',
 };
 
-const { default: language } = await import(options.language);
+let { default: language } = await import(
+  './'.includes(options.language[0]) ? resolve(options.language) : options.language
+);
 
-const matcher = options.matcher
-  ? m({ raw: [options.matcher] })
+let parsedMatcher = null;
+
+if (options.matcher) {
+  try {
+    parsedMatcher = m({ raw: [options.matcher] });
+  } catch (e) {
+    throw new Error('Matcher specified but could not be parsed', { cause: e });
+  }
+}
+
+let matcher = parsedMatcher
+  ? parsedMatcher
   : options.production
-  ? m`<${options.production} />`
+  ? m`<${printIdentifier(options.production)} />`
   : language.defaultMatcher;
 
-const logStderr = (...args) => {
+if (!matcher) {
+  throw new Error(
+    'No matcher specified with -m or -p, and no default matcher specified by language',
+  );
+}
+
+let logStderr = (...args) => {
   process.stderr.write(args.join(' ') + '\n');
 };
 
-const enhancers = freezeRecord(options.verbose ? { ...debugEnhancers, agast: null } : {});
+let enhancers = freezeRecord(options.verbose ? { ...debugEnhancers, agast: null } : {});
 
 let { streamParse } = buildModule(enhancers);
 
-const rawStream = process.stdin.setEncoding('utf-8');
+let rawStream = process.stdin.setEncoding('utf-8');
 
 Error.stackTraceLimit = 20;
 
