@@ -14,7 +14,7 @@ import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { printIdentifier } from '@bablr/agast-helpers/print';
 import { o, m } from '@bablr/helpers/grammar';
 import { freezeRecord } from '@bablr/agast-helpers/object';
-import { hoistTrivia, transformStream, transformStreams } from '@bablr/agast-helpers/stream';
+import { hoist, transformStream, transformStreams } from '@bablr/agast-helpers/stream';
 import { readFile, decodeUTF8 } from '@bablr/fs';
 
 program
@@ -114,7 +114,7 @@ await evaluateReturn(
     );
 
     if (options.hoist) {
-      tags = hoistTrivia(tags);
+      tags = hoist(tags);
     }
 
     let printed = transformStream(tags, 1, (tags) =>
