@@ -8,7 +8,7 @@ import { embeddedSourceFrom, readFromStream, stripTrailingNewline } from '@bablr
 import { debugEnhancers } from '@bablr/helpers/enhancers';
 import { resolve } from 'node:path';
 import colorSupport from 'color-support';
-import { evaluate } from '@bablr/io-vm-node';
+import { evaluate } from '@bablr/io-vm';
 import { writeOutput, style } from '../lib/syntax.js';
 import { evaluateReturn } from '@bablr/agast-helpers/tree';
 import { printIdentifier } from '@bablr/agast-helpers/print';

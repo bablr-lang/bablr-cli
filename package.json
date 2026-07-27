@@ -20,7 +20,7 @@
     "@bablr/agast-helpers": "0.11.4",
     "@bablr/agast-vm-helpers": "0.11.4",
     "@bablr/fs": "4.0.0",
-    "@bablr/io-vm-node": "0.10.3",
+    "@bablr/io-vm": "0.10.3",
     "@bablr/record": "1.0.0",
     "@bablr/helpers": "0.26.5",
     "@iter-tools/imm-stack": "1.2.0",
