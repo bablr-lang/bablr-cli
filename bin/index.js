@@ -74,7 +74,7 @@ if (options.matcher) {
 let matcher = parsedMatcher
   ? parsedMatcher
   : options.production
-  ? m`<${printIdentifier(options.production)} />`
+  ? m`<{printIdentifier(options.production)} />`
   : language.defaultMatcher;
 
 if (!matcher) {
